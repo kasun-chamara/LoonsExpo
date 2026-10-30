@@ -8,7 +8,7 @@ const MainLayout = ({ children }) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [hovered, setHovered] = useState(false);
-  const drawerWidth = 250;
+  const drawerWidth = 256;
   const collapsedWidth = 64;
   const isSidebarExpanded = !collapsed || hovered;
   const sidebarWidth = isSidebarExpanded ? drawerWidth : collapsedWidth;
@@ -26,7 +26,7 @@ const MainLayout = ({ children }) => {
           collapsed={collapsed}
           setCollapsed={setCollapsed}
         />
-        <Toolbar sx={{ minHeight: { xs: 48, md: 50 } }} />
+        <Toolbar sx={{ minHeight: { xs: 64, md: 68 } }} />
       </Box>
 
       <Box sx={{ display: 'flex', flex: 1 }}>

@@ -20,6 +20,26 @@ export const lightTheme = createTheme({
       light: '#ba68c8',
       dark: '#7b1fa2',
     },
+    // Brand accent from the organiser console design (additive; primary/secondary are unchanged)
+    brand: {
+      main: '#F4320B',
+      dark: '#C42608',
+      light: '#FFEEE9',
+      tint: '#FFE9E3',
+      contrastText: '#ffffff',
+      success: '#12A150',
+      hover: 'rgba(244, 50, 11, 0.08)',
+      border: 'rgba(244, 50, 11, 0.4)',
+      borderHover: 'rgba(244, 50, 11, 0.35)',
+      ring: 'rgba(244, 50, 11, 0.14)',
+    },
+    // Neutral border colours shared by the header, sidebar and cards
+    border: {
+      main: '#E6E9F0',
+      // Stronger outline and fill for text fields so they stand out from the card
+      strong: '#C5CCD8',
+      field: '#ffffff',
+    },
     background: {
       default: '#ebeff5',
       paper: '#ffffff',
@@ -74,6 +94,25 @@ export const darkTheme = createTheme({
       main: '#ce93d8',
       light: '#f3e5f5',
       dark: '#ab47bc',
+    },
+    // Brand accent from the organiser console design (additive; primary/secondary are unchanged)
+    brand: {
+      main: '#F4320B',
+      dark: '#FF7A59',
+      light: 'rgba(244, 50, 11, 0.2)',
+      tint: 'rgba(244, 50, 11, 0.18)',
+      contrastText: '#ffffff',
+      success: '#12A150',
+      hover: 'rgba(244, 50, 11, 0.12)',
+      border: 'rgba(244, 50, 11, 0.5)',
+      borderHover: 'rgba(244, 50, 11, 0.45)',
+      ring: 'rgba(244, 50, 11, 0.22)',
+    },
+    // Neutral border colours shared by the header, sidebar and cards
+    border: {
+      main: '#3a3a3a',
+      strong: '#6B7280',
+      field: 'rgba(255, 255, 255, 0.06)',
     },
     background: {
       default: '#121212',
