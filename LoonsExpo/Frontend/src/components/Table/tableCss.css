@@ -1,0 +1,112 @@
+.MuiTable-root {
+  width: max-content !important;
+  min-width: 100%;
+}
+
+.MuiTableRow-footer {
+  display: grid !important;
+}
+
+.MuiTableFooter-root {
+  display: block !important;
+  width: 100%;
+}
+
+.MuiTableCell-head .MuiButtonBase-root {
+  font-weight: 600 !important;
+  margin: 0px;
+}
+
+.MuiTableCell-head {
+  font-weight: 600 !important;
+}
+
+.grabbable {
+  cursor: move;
+  cursor: grab;
+  border-radius: 10px;
+  user-select: none;
+}
+
+.grabbable tr:nth-child(even) {
+  background-color: #f7f7fa;
+  /* fallback for palette.table.oddRowColor */
+}
+
+.MuiTableCell-root {
+  word-break: keep-all !important;
+  /* padding: 4px 4px 4px 4px !important; */
+  border-color: #f3f4f4 !important;
+  line-height: 2.43 !important;
+}
+
+.loons-table-scroll {
+  overflow-x: auto;
+  overflow-y: visible;
+  cursor: grab;
+  user-select: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.loons-table-scroll.dragging {
+  cursor: grabbing;
+  background: #f5f7fa;
+}
+
+/* Tiny, subtle scrollbar for DataGrid's virtual scroller */
+.MuiDataGrid-virtualScroller {
+  scrollbar-width: thin;
+  /* Firefox */
+  scrollbar-color: #bdbdbd #f5f5f5;
+  /* Firefox */
+}
+
+.MuiDataGrid-virtualScroller::-webkit-scrollbar {
+  height: 4px;
+  /* Horizontal scrollbar height */
+  width: 4px;
+  /* Vertical scrollbar width */
+  background: #f5f5f5;
+}
+
+.MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb {
+  background: #bdbdbd;
+  border-radius: 4px;
+}
+
+.MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}
+
+/* Tiny scrollbar for the outer table container */
+.loons-table-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #bdbdbd #f5f5f5;
+}
+
+.loons-table-scroll::-webkit-scrollbar {
+  height: 4px;
+  width: 4px;
+  background: #f5f5f5;
+}
+
+.loons-table-scroll::-webkit-scrollbar-thumb {
+  background: #bdbdbd;
+  border-radius: 4px;
+}
+
+.loons-table-scroll::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}
+
+.MuiDataGrid-scrollbar {
+  display: none !important;
+}
+
+.MuiDataGrid-columnHeaders {
+  background-color: #f5f5f5 !important;
+}
+
+.MuiDataGrid-columnHeaderTitle {
+  font-weight: bold !important;
+}

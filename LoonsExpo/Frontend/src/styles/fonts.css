@@ -1,0 +1,52 @@
+@font-face {
+  font-family: 'Roboto';
+  src: url('/public/assets/fonts/Roboto-Regular.ttf') format('ttf');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+ @font-face {
+  font-family: 'exo';
+  src: url('/public/assets/fonts/exo-latin-200.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'exo';
+  src: url('/public/assets/fonts/exo-latin-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'exo';
+  src: url('/public/assets/fonts/exo-latin-500.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'exo';
+  src: url('/public/assets/fonts/exo-latin-600.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'exo';
+  src: url('/public/assets/fonts/exo-latin-700.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+ @font-face {
+  font-family: 'inter';
+  src: url('/public/assets/fonts/Inter_18pt-Regular.ttf') format('ttf');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Add more font weights/styles as needed */

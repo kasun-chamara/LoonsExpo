@@ -1,0 +1,17 @@
+.pagedjs_page {
+    background: white;
+    /* box-shadow: 0px 0px 9px 4px rgba(0, 0, 0, 0.1); */
+    margin: 0.1rem;
+
+  }
+
+.pagedjs_page .pagedjs_margin-top-center,
+.pagedjs_page .pagedjs_margin-bottom-center,
+.pagedjs_page .pagedjs_margin-left-top,
+.pagedjs_page .pagedjs_margin-left-middle,
+.pagedjs_page .pagedjs_margin-left-bottom,
+.pagedjs_page .pagedjs_margin-right-top,
+.pagedjs_page .pagedjs_margin-right-middle,
+.pagedjs_page .pagedjs_margin-right-bottom {
+    text-align: unset !important;
+}

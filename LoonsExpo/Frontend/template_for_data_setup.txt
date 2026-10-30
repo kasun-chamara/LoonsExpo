@@ -1,0 +1,228 @@
+import { Grid, IconButton, Tooltip, Dialog, DialogContent } from '@mui/material';
+import { Button, CollapsibleSection, MainCard, MuiTable, TextValidator, ValidatorForm } from 'components';
+import React, { useCallback, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import dliServices from 'services/dlisServices';
+import EditIcon from '@mui/icons-material/Edit';
+import { scrollToTop } from 'Utils';
+import { useNavigate } from 'react-router-dom';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+
+
+const IncidentTypeSetup = () => {
+    const [formData, setFormData] = useState({
+        code: '',
+        description: ''
+    });
+    const [loading, setLoading] = useState(false);
+    const [data, setData] = useState([]);
+    const [isEdit, setIsEdit] = useState(false);
+    const [openEditModal, setOpenEditModal] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [editingData, setEditingData] = useState(null);
+    const [submitting, setSubmitting] = useState(false);
+    const [filters, setFilters] = useState({
+        page: 1,
+        limit: 20,
+        search: null
+    });
+    const [totalItems, setTotalItems] = useState(0);
+
+    const getData = useCallback(async () => {
+        setLoading(true);
+        const response = await dliServices.getData(filters);
+        if (response.success) {
+            setData(response?.data?.data || []);
+            setTotalItems(response?.data?.totalItems || 0);
+        }
+        setLoading(false);
+    }, [filters]);
+
+    useEffect(() => {
+        getData();
+    }, [getData]);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevData => ({
+            ...prevData,
+            [name]: value
+        }));
+    };
+
+    const setPage = (page) => {
+        setFilters(prevFilters => ({
+            ...prevFilters,
+            page: page,
+        }));
+    };
+
+    const setPageSize = (pageSize) => {
+        setFilters(prevFilters => ({
+            ...prevFilters,
+            page: 1,
+            limit: pageSize,
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setSubmitting(true);
+        try {
+            const apiData = Object.fromEntries(
+                Object.entries(formData).filter(([_, value]) => value !== null && value !== '')
+            );
+            let response;
+            if (isEdit) {
+                response = await dliServices.updateDLI(editingData, apiData);
+                if (response.success) {
+                    toast.success(response.message || 'Data updated successfully!');
+                } else {
+                    toast.error(response.message || 'Failed to update. Please try again.');
+                }
+            } else {
+                response = await dliServices.createDLI(apiData);
+                if (response.success) {
+                    toast.success(response.message || 'Created successfully!');
+                } else {
+                    toast.error(response.message || 'Failed to create. Please try again.');
+                }
+            }
+            if (response.success) {
+                setFormData({ code: '', description: '' });
+                setIsEdit(false);
+                setOpenEditModal(false);
+                setEditingData(null);
+                getData();
+                scrollToTop();
+            }
+        } catch (error) {
+            toast.error('An unexpected error occurred. Please try again.');
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    return (
+        <div>
+            <MainCard>
+                <CollapsibleSection title="DLIs" collapsTrigger={openEditModal} buttonText='New'>
+                    <ValidatorForm onSubmit={handleSubmit} process={submitting}>
+                        <Grid container spacing={1}>
+                            <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
+                                <TextValidator
+                                    label="DLI Code"
+                                    name="code"
+                                    value={formData.code || ''}
+                                    onChange={handleInputChange}
+                                    validators={['required']}
+                                    errorMessages={['This field is required']}
+                                    required={true}
+                                    disabled={loading}
+                                />
+                            </Grid>
+                            <Grid size={{ lg: 6, md: 6, sm: 12, xs: 12 }}>
+                                <TextValidator
+                                    label="Description"
+                                    name="description"
+                                    value={formData.description || ''}
+                                    multiline={true}
+                                    rows={4}
+                                    onChange={handleInputChange}
+                                    validators={['required']}
+                                    errorMessages={['This field is required']}
+                                    required={true}
+                                    disabled={loading}
+                                />
+                            </Grid>
+                        </Grid>
+                        <Grid className='mt-2' container spacing={1}>
+                            <Grid>
+                                <Button type="submit" process={submitting}>{isEdit ? 'UPDATE' : 'SAVE'}</Button>
+                            </Grid>
+                            <Grid>
+                                {openEditModal && <Button
+                                    className='btn-warning'
+                                    onClick={() => {
+                                        setFormData({ code: '', description: '' });
+                                        setIsEdit(false);
+                                        setOpenEditModal(false);
+                                        setEditingData(null);
+                                    }}
+                                >
+                                    Cancel
+                                </Button>}
+                            </Grid>
+                        </Grid>
+                    </ValidatorForm>
+                </CollapsibleSection>
+                <div>
+                    <MuiTable
+                        columns={[
+                            {
+                                accessorKey: 'actions',
+                                header: 'Actions',
+                                Cell: ({ cell }) => (
+                                    <div>
+
+
+
+                                        <Tooltip title="Edit">
+                                            <IconButton size="small" color="primary" onClick={() => {
+                                                setIsEdit(false);
+                                                setOpenEditModal(false);
+                                                setTimeout(() => {
+                                                    setFormData({
+                                                        code: cell.row.original.code,
+                                                        description: cell.row.original.description,
+                                                    });
+                                                    setIsEdit(true);
+                                                    setOpenEditModal(true);
+                                                    setEditingData(cell.row.original.id);
+                                                    scrollToTop();
+                                                }, 500);
+                                            }}>
+                                                <EditIcon />
+                                            </IconButton>
+                                        </Tooltip>
+
+                                        <Tooltip title="Assign Institutes">
+                                            <IconButton size="small" color="primary" onClick={() => {
+                                                setOpen(true);
+                                                setOpeningDLIId(cell.row.original.id);
+                                            }}>
+                                                <VisibilityIcon />
+                                            </IconButton>
+                                        </Tooltip>
+
+                                    </div>
+                                ),
+                            },
+                            {
+                                accessorKey: 'code',
+                                header: 'DLI Code',
+                            },
+                            {
+                                accessorKey: 'description',
+                                header: 'Description',
+                            }
+                        ]}
+                        data={data}
+                        title="DLIs"
+                        manualPagination={true}
+                        rowCount={totalItems}
+                        currentPage={filters.page}
+                        pageSize={filters.limit}
+                        onPageChange={setPage}
+                        onPageSizeChange={setPageSize}
+                        loading={loading}
+                    />
+                </div>
+            </MainCard>
+
+
+        </div>
+    );
+};
+
+export default IncidentTypeSetup;

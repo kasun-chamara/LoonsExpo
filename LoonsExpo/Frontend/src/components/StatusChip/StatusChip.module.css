@@ -1,0 +1,32 @@
+.statusChip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.625rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.active {
+  background-color: #dcfce7; /* Light green background */
+  color: #166534; /* Dark green text */
+}
+
+.active:hover {
+  background-color: #bbf7d0; /* Slightly darker green on hover */
+}
+
+.deactive {
+  background-color: #fee2e2; /* Light red background */
+  color: #991b1b; /* Dark red text */
+}
+
+.deactive:hover {
+  background-color: #fecaca; /* Slightly darker red on hover */
+}
+
+.clickable:hover {
+  opacity: 0.8;
+}

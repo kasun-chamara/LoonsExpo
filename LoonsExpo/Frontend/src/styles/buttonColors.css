@@ -1,0 +1,45 @@
+/* Custom button color classes for ConfirmDialog and other components */
+.btn-success {
+  transition: all 250ms;
+  color: white !important;
+  background-color: #28a745 !important;
+}
+.btn-success:hover {
+  background: #1b6d2d !important;
+}
+
+.btn-danger {
+  transition: all 250ms;
+  color: white !important;
+  background-color: #dc3545 !important;
+}
+.btn-danger:hover {
+  background: #ad2834 !important;
+}
+
+.btn-warning {
+  transition: all 250ms;
+  color: white !important;
+  background-color: #ffc107 !important;
+}
+.btn-warning:hover {
+  background: #ce9a00 !important;
+}
+
+.btn-info {
+  transition: all 250ms;
+  color: white !important;
+  background-color: #17a2b8 !important;
+}
+.btn-info:hover {
+  background: #087182 !important;
+}
+
+.btn-dark {
+  transition: all 250ms;
+  color: white !important;
+  background-color: #343a40 !important;
+}
+.btn-dark:hover {
+  background: #16191b !important;
+}

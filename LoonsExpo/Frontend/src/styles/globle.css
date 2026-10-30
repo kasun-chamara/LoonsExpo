@@ -1,0 +1,32 @@
+
+/* Tiny, transparent scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.15);
+    border-radius: 8px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0,0,0,0.25);
+  }
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
+  /* Firefox */
+  html {
+  /*   scrollbar-width: none; */
+    scrollbar-color: rgba(0,0,0,0.15) transparent;
+  }
+  .MuiTableContainer-root{
+    scrollbar-width: none;
+  }
+  /*  .MuiAutocomplete-popper{
+    zoom: 0.95 !important;
+
+  }  */
+
+/* Fix Autocomplete popup width to match the input field */

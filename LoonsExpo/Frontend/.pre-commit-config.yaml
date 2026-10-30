@@ -1,0 +1,53 @@
+default_stages: [pre-commit]
+fail_fast: false
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
+      - id: check-case-conflict
+      - id: mixed-line-ending
+        args: [--fix=lf]
+
+  - repo: local
+    hooks:
+      - id: validate-branch-name
+        name: Validate branch naming format
+        entry: node .hooks/check-branch-name.mjs
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+
+      - id: validate-copilot-instructions
+        name: Validate Copilot instructions file
+        entry: node .hooks/check-copilot-instructions.mjs
+        language: system
+        pass_filenames: false
+        stages: [pre-commit]
+
+      - id: forbid-mui-grid2-import
+        name: Block deprecated MUI Grid2 import
+        language: pygrep
+        entry: "@mui/material/Grid2"
+        files: "\\.(js|jsx|ts|tsx)$"
+        stages: [pre-commit]
+
+      - id: frontend-tests
+        name: Run frontend tests (pre-push)
+        entry: npm run test -- --watchAll=false --passWithNoTests
+        language: system
+        pass_filenames: false
+        stages: [pre-push]
+
+      - id: frontend-build
+        name: Verify production build (pre-push)
+        entry: npm run build
+        language: system
+        pass_filenames: false
+        stages: [pre-push]
