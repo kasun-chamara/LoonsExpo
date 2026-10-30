@@ -1,226 +1,114 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Box, Typography } from '@mui/material';
 import {
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  CardHeader,
-  Avatar,
-  Grid,
-  TextField,
-  Button,
-  Divider,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  Chip,
-} from '@mui/material';
-import {
-  Person,
-  Email,
-  Phone,
-  LocationOn,
-  Work,
-  CalendarToday,
-} from '@mui/icons-material';
-import { useSelector } from 'react-redux';
+  MainCard,
+  PageHeader,
+  SectionCard,
+  FormField,
+  SettingList,
+  InitialsAvatar,
+  Tag,
+  OutlineButton,
+  PrimaryButton,
+} from 'components';
+import { PROFILE_DEFAULTS, PROFILE_FIELDS, PROFILE_STATS, PROFILE_PREFERENCES, ACCOUNT_MENU_DEFAULT_ROLE } from 'mockDb';
+
+const initialsOf = name => name.split(' ').map(p => p[0]).filter(Boolean).slice(0, 2).join('').toUpperCase();
 
 const Profile = () => {
-  const user = useSelector((state) => state.auth.user);
-  const [isEditing, setIsEditing] = useState(false);
-  const [profileData, setProfileData] = useState({
-    name: user?.name || 'John Doe',
-    email: user?.email || 'john.doe@example.com',
-    phone: '+1 (555) 123-4567',
-    location: 'New York, NY',
-    department: 'IT Department',
-    joinDate: 'January 15, 2023',
-  });
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.auth.user);
 
-  const handleSave = () => {
-    // In a real app, you would save this data to the backend
-    console.log('Profile updated:', profileData);
-    setIsEditing(false);
+  const initial = {
+    ...PROFILE_DEFAULTS,
+    name: user?.name || PROFILE_DEFAULTS.name,
+    email: user?.email || PROFILE_DEFAULTS.email,
+  };
+  const [data, setData] = useState(initial);
+  const [draft, setDraft] = useState(initial);
+  const [editing, setEditing] = useState(false);
+
+  const startEdit = () => {
+    setDraft(data);
+    setEditing(true);
+  };
+  const save = () => {
+    setData(draft);
+    // Keep the name and email in the signed-in user so the header shows them too.
+    dispatch({ type: 'UPDATE_USER', payload: { name: draft.name, email: draft.email } });
+    setEditing(false);
   };
 
-  const handleCancel = () => {
-    setProfileData({
-      name: user?.name || 'John Doe',
-      email: user?.email || 'john.doe@example.com',
-      phone: '+1 (555) 123-4567',
-      location: 'New York, NY',
-      department: 'IT Department',
-      joinDate: 'January 15, 2023',
-    });
-    setIsEditing(false);
-  };
+  const role = user?.role || ACCOUNT_MENU_DEFAULT_ROLE;
 
   return (
-    <Box>
-      <Typography variant="h4" gutterBottom>
-        Profile
-      </Typography>
+    <MainCard sx={{ width: '100%' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+        <PageHeader title="My profile" subtitle="Your account details and sign-in preferences" />
 
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
-          <Card>
-            <CardContent sx={{ textAlign: 'center' }}>
-              <Avatar
-                sx={{
-                  width: 120,
-                  height: 120,
-                  mx: 'auto',
-                  mb: 2,
-                  bgcolor: 'primary.main',
-                  fontSize: '3rem',
-                }}
-              >
-                {profileData.name.charAt(0)}
-              </Avatar>
-              <Typography variant="h5" gutterBottom>
-                {profileData.name}
-              </Typography>
-              <Chip
-                label={user?.role || 'User'}
-                color={user?.role === 'admin' ? 'error' : 'primary'}
-                sx={{ mb: 2 }}
-              />
-              <Typography variant="body2" color="text.secondary">
-                {profileData.department}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
+        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', lg: '320px minmax(0, 1fr)' }, gap: 2.5, alignItems: 'start' }}>
+          <SectionCard sx={{ textAlign: 'center', p: 3 }}>
+            <InitialsAvatar initials={initialsOf(data.name)} size={96} solid color="#F4320B" sx={{ mx: 'auto', fontSize: 34, borderRadius: '28px' }} />
+            <Typography component="h2" sx={{ mt: 2, fontSize: 20, fontWeight: 800, letterSpacing: '-.01em' }}>{data.name}</Typography>
+            <Typography sx={{ fontSize: 13, color: 'text.secondary', mb: 1.5 }}>{data.department}</Typography>
+            <Tag tone={role === 'admin' ? 'red' : 'brand'}>{role}</Tag>
 
-        <Grid item xs={12} md={8}>
-          <Card>
-            <CardHeader
-              title="Personal Information"
+            <Box sx={{ mt: 2.5, pt: 2, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 1, borderTop: theme => `1px solid ${theme.palette.border.main}` }}>
+              {PROFILE_STATS.map(s => (
+                <Box key={s.label}>
+                  <Box component="b" sx={{ display: 'block', fontSize: 20 }}>{s.value}</Box>
+                  <Box component="small" sx={{ display: 'block', fontSize: 11, lineHeight: 1.3, color: 'text.secondary' }}>{s.label}</Box>
+                </Box>
+              ))}
+            </Box>
+          </SectionCard>
+
+          <Box sx={{ display: 'grid', gap: 2.5, minWidth: 0 }}>
+            <SectionCard
+              title="Personal information"
+              subtitle="Shown to your team in the organiser console"
               action={
-                <Button
-                  variant={isEditing ? "outlined" : "contained"}
-                  onClick={() => setIsEditing(!isEditing)}
-                >
-                  {isEditing ? 'Cancel' : 'Edit'}
-                </Button>
-              }
-            />
-            <CardContent>
-              {isEditing ? (
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Name"
-                      value={profileData.name}
-                      onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Email"
-                      type="email"
-                      value={profileData.email}
-                      onChange={(e) => setProfileData({ ...profileData, email: e.target.value })}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Phone"
-                      value={profileData.phone}
-                      onChange={(e) => setProfileData({ ...profileData, phone: e.target.value })}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      fullWidth
-                      label="Location"
-                      value={profileData.location}
-                      onChange={(e) => setProfileData({ ...profileData, location: e.target.value })}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Box sx={{ mt: 2 }}>
-                      <Button variant="contained" onClick={handleSave} sx={{ mr: 1 }}>
-                        Save Changes
-                      </Button>
-                      <Button variant="outlined" onClick={handleCancel}>
-                        Cancel
-                      </Button>
+                editing
+                  ? (
+                    <Box sx={{ display: 'flex', gap: 1 }}>
+                      <OutlineButton sx={{ minHeight: 38 }} onClick={() => setEditing(false)}>Cancel</OutlineButton>
+                      <PrimaryButton sx={{ minHeight: 38 }} onClick={save}>Save changes</PrimaryButton>
                     </Box>
-                  </Grid>
-                </Grid>
+                  )
+                  : <OutlineButton sx={{ minHeight: 38 }} onClick={startEdit}>Edit</OutlineButton>
+              }
+            >
+              {editing ? (
+                <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 2 }}>
+                  {PROFILE_FIELDS.filter(f => f.editable).map(f => (
+                    <FormField key={f.key} label={f.label} type={f.type} value={draft[f.key]} onChange={e => setDraft(d => ({ ...d, [f.key]: e.target.value }))} />
+                  ))}
+                </Box>
               ) : (
-                <List>
-                  <ListItem>
-                    <ListItemIcon>
-                      <Person />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Name"
-                      secondary={profileData.name}
-                    />
-                  </ListItem>
-                  <Divider />
-                  <ListItem>
-                    <ListItemIcon>
-                      <Email />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Email"
-                      secondary={profileData.email}
-                    />
-                  </ListItem>
-                  <Divider />
-                  <ListItem>
-                    <ListItemIcon>
-                      <Phone />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Phone"
-                      secondary={profileData.phone}
-                    />
-                  </ListItem>
-                  <Divider />
-                  <ListItem>
-                    <ListItemIcon>
-                      <LocationOn />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Location"
-                      secondary={profileData.location}
-                    />
-                  </ListItem>
-                  <Divider />
-                  <ListItem>
-                    <ListItemIcon>
-                      <Work />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Department"
-                      secondary={profileData.department}
-                    />
-                  </ListItem>
-                  <Divider />
-                  <ListItem>
-                    <ListItemIcon>
-                      <CalendarToday />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Join Date"
-                      secondary={profileData.joinDate}
-                    />
-                  </ListItem>
-                </List>
+                <Box>
+                  {PROFILE_FIELDS.map(f => (
+                    <Box key={f.key} sx={{ display: 'flex', alignItems: 'center', gap: 2, py: 1.75, borderBottom: theme => `1px solid ${theme.palette.border.main}`, '&:last-of-type': { borderBottom: 0, pb: 0 }, '&:first-of-type': { pt: 0 } }}>
+                      <Box sx={{ flex: 'none', width: 40, height: 40, borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'brand.main', bgcolor: 'brand.tint' }}>
+                        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={f.icon} /></svg>
+                      </Box>
+                      <Box sx={{ minWidth: 0 }}>
+                        <Box component="small" sx={{ display: 'block', fontSize: 12, color: 'text.secondary' }}>{f.label}</Box>
+                        <Box component="b" sx={{ fontSize: 14.5, color: 'text.primary', overflowWrap: 'anywhere' }}>{data[f.key]}</Box>
+                      </Box>
+                    </Box>
+                  ))}
+                </Box>
               )}
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-    </Box>
+            </SectionCard>
+
+            <SectionCard title="Sign-in and alerts" subtitle="How you want to be protected and notified">
+              <SettingList items={PROFILE_PREFERENCES} gap={2.5} />
+            </SectionCard>
+          </Box>
+        </Box>
+      </Box>
+    </MainCard>
   );
 };
 

@@ -17,6 +17,9 @@ import {
   Brightness4,
   Brightness7,
   NotificationsNoneRounded,
+  PersonOutlineRounded,
+  SettingsOutlined,
+  LogoutRounded,
 } from '@mui/icons-material';
 import { alpha } from '@mui/material/styles';
 import { useDispatch, useSelector } from 'react-redux';
@@ -76,6 +79,16 @@ const Header = ({ onMenuClick, sidebarWidth = 256, setCollapsed }) => {
     bgcolor: surface,
     color: brand.main,
     '&:hover': { bgcolor: brand.light, borderColor: brand.main, color: brand.dark },
+  };
+
+  const menuItem = {
+    gap: 1.5,
+    minHeight: 42,
+    borderRadius: '10px',
+    fontSize: 14,
+    fontWeight: 600,
+    color: theme.palette.text.primary,
+    '&:hover': { bgcolor: brand.hover, color: brand.dark },
   };
 
   const displayName = user?.name || user?.username || APP_CONTENT.header.fallbackUserName;
@@ -200,10 +213,40 @@ const Header = ({ onMenuClick, sidebarWidth = 256, setCollapsed }) => {
             onClose={handleMenuClose}
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            PaperProps={{
+              sx: {
+                mt: 1.25,
+                minWidth: 260,
+                borderRadius: '14px',
+                border: `1px solid ${theme.palette.border.main}`,
+                boxShadow: '0 12px 32px rgba(27,36,48,.16)',
+                '& .MuiList-root': { p: 1 },
+              },
+            }}
           >
-            <MenuItem onClick={handleProfile}>Profile</MenuItem>
-            <Divider />
-            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, px: 1.5, py: 1.25, mb: 0.5 }}>
+              <Box sx={{ width: 40, height: 40, flex: 'none', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, fontSize: 14, color: brand.contrastText, bgcolor: brand.main }}>
+                {initials || 'U'}
+              </Box>
+              <Box sx={{ minWidth: 0 }}>
+                <Typography noWrap sx={{ fontSize: 14, fontWeight: 700, color: theme.palette.text.primary }}>{displayName}</Typography>
+                <Typography noWrap sx={{ fontSize: 12, color: muted }}>{user?.email || APP_CONTENT.header.userRole}</Typography>
+              </Box>
+            </Box>
+            <Divider sx={{ my: 0.5 }} />
+            <MenuItem onClick={handleProfile} sx={menuItem}>
+              <PersonOutlineRounded fontSize="small" />
+              Profile
+            </MenuItem>
+            <MenuItem onClick={() => { handleMenuClose(); navigate('/settings'); }} sx={menuItem}>
+              <SettingsOutlined fontSize="small" />
+              Settings
+            </MenuItem>
+            <Divider sx={{ my: 0.5 }} />
+            <MenuItem onClick={handleLogout} sx={{ ...menuItem, color: '#E5391A', '&:hover': { bgcolor: alpha('#E5391A', 0.1), color: '#E5391A' } }}>
+              <LogoutRounded fontSize="small" />
+              Logout
+            </MenuItem>
           </Menu>
         </Box>
       </Toolbar>

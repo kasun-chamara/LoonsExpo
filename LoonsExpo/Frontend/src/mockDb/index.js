@@ -7,3 +7,4 @@ export * from './settings';
 export * from './dashboard';
 export * from './visitorRegistration';
 export * from './notifications';
+export * from './profile';
